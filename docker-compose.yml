@@ -13,5 +13,8 @@ services:
       PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
       DEFAULT_VECTORIZER_MODULE: 'none'
       CLUSTER_HOSTNAME: 'node1'
+    
+    # volumes:
+    # -model_cache:/home/user/.cache/huggingface
 volumes:
   weaviate_data:
