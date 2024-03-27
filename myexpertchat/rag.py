@@ -1,3 +1,5 @@
+import logging
+
 from langchain.prompts import PromptTemplate
 from langchain_community.llms import LlamaCpp
 from langchain_core.output_parsers import StrOutputParser
@@ -5,6 +7,11 @@ from langchain_core.runnables import RunnablePassthrough
 
 from myexpertchat.config import settings
 from myexpertchat.db import get_db_connection
+
+# Lazy load chain
+CHAIN = None
+
+log = logging.getLogger(__name__)
 
 
 def build_llm():
@@ -20,14 +27,21 @@ def build_llm():
 def build_prompt():
     prompt_template = """
     <|system|>
-    Answer the question based only on the following context to help. Cite your sources. 
+    Using the information contained in the context, 
+    give a comprehensive answer to the question.
+    If the answer is contained in the context, also report the source URL.
+    If the answer cannot be deduced from the context, do not give an answer.
+    
+    </s>
 
+    <|user|>
+    Context: 
     {context}
 
-    </s>
-    <|user|>
+    Question:
     {question}
     </s>
+
     <|assistant|>
 
     """
@@ -54,5 +68,10 @@ def build_rag_chain():
     return chain
 
 
-def get_answer_from_rag(question: str, chain) -> str:
-    chain.invoke(question)
+def get_answer_from_rag(question: str) -> str:
+    global CHAIN
+    if CHAIN is None:
+        CHAIN = build_rag_chain()
+    log.info(f"running query: {question}")
+    response = CHAIN.invoke(question)
+    return response

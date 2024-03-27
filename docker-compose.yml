@@ -1,7 +1,8 @@
 services:
   weaviate:
     image: semitechnologies/weaviate:1.24.5
-    ports:
+    # ports:
+    expose:
     - 8080:8080
     - 50051:50051
     volumes:
@@ -13,8 +14,21 @@ services:
       PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
       DEFAULT_VECTORIZER_MODULE: 'none'
       CLUSTER_HOSTNAME: 'node1'
-    
+  ingest:
+    image: myexpertchat:latest
+    ports:
+    - 8505:8505
+    volumes:
+    - llm_data:/data/
+    environment:
+      HF_HOME: '/data/'
+      MYEXPERTCHAT_WEAVIATE_URL: 'http://weaviate:8080'
+    command: gunicorn /app/ingest:app
+
+
+
     # volumes:
     # -model_cache:/home/user/.cache/huggingface
 volumes:
   weaviate_data:
+  llm_data:
