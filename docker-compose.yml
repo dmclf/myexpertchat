@@ -3,8 +3,8 @@ services:
     image: semitechnologies/weaviate:1.24.5
     # ports:
     expose:
-    - 8080:8080
-    - 50051:50051
+    - 8080
+    - 50051
     volumes:
     - weaviate_data:/var/lib/weaviate
     restart: on-failure:0
@@ -17,11 +17,11 @@ services:
   ingest:
     image: myexpertchat:latest
     ports:
-    - 8505:8505
+    - 8000:8005
     volumes:
     - llm_data:/data/
     environment:
-      HF_HOME: '/data/'
+      HF_HOME: '/data/huggingface'
       MYEXPERTCHAT_WEAVIATE_URL: 'http://weaviate:8080'
     command: gunicorn /app/ingest:app
 

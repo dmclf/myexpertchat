@@ -3,11 +3,13 @@ import logging
 from langchain.prompts import PromptTemplate
 from langchain_community.llms import LlamaCpp
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
+from langchain_core.runnables import RunnablePassthrough, RunnableParallel
 
 from myexpertchat.config import settings
 from myexpertchat.db import get_db_connection
+# from langchain.globals import set_debug
 
+# set_debug(True)
 # Lazy load chain
 CHAIN = None
 
@@ -31,7 +33,7 @@ def build_prompt():
     give a comprehensive answer to the question.
     If the answer is contained in the context, also report the source URL.
     If the answer cannot be deduced from the context, do not give an answer.
-    
+
     </s>
 
     <|user|>
@@ -62,7 +64,7 @@ def build_rag_chain():
     chain = (
         {"context": retriever, "question": RunnablePassthrough()}
         | prompt
-        | llm
+        # | llm
         | StrOutputParser()
     )
     return chain

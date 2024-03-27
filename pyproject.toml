@@ -15,6 +15,7 @@ dynaconf = "^3.2.5"
 flask = "^3.0.2"
 gunicorn = "^21.2.0"
 llama-cpp-python = "^0.2.57"
+grpcio = "^1.62.1"
 
 
 [tool.poetry.group.dev.dependencies]
