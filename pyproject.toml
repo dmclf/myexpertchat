@@ -7,9 +7,13 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-weaviate-client = ""
+weaviate-client = "3.99.0a5"
 sentence-transformers = "^2.6.1"
 langchain = "^0.1.13"
+streamlit = "^1.32.2"
+dynaconf = "^3.2.5"
+flask = "^3.0.2"
+gunicorn = "^21.2.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -18,3 +22,6 @@ ipython = "^8.22.2"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 120
