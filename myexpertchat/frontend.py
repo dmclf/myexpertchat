@@ -1,5 +1,6 @@
 import streamlit as st
 
+from myexpertchat.rag import llm
 from myexpertchat.rag import get_answer_from_rag
 
 st.set_page_config(page_title="MyExpertChat")
@@ -22,8 +23,10 @@ if prompt := st.chat_input("Message MyExpertChat..."):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    response = f"MyExpertChat: {get_answer_from_rag(question=prompt)}"
-    # response = f"MyExpertChat: {prompt}"
+    response = f"MyExpertChat: {prompt}"
+    # response = llm.invoke(prompt)
+    # response = f"MyExpertChat: {get_answer_from_rag(question=prompt)}"
+
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
         st.markdown(response)

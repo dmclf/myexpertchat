@@ -6,7 +6,9 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && mkdir -p /data \
+    && chown $USERNAME /data
 
 WORKDIR /app
 
@@ -27,6 +29,6 @@ COPY pyproject.toml poetry.lock ./
 RUN poetry config virtualenvs.create false \
     && poetry install --without dev
 
-EXPOSE 8505 8510
+EXPOSE 8000 8510
 
 USER $USERNAME

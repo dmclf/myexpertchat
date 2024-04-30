@@ -3,8 +3,8 @@ services:
     image: semitechnologies/weaviate:1.24.5
     # ports:
     expose:
-    - 8080
-    - 50051
+    - 8080:8080
+    - 50051:50051
     volumes:
     - weaviate_data:/var/lib/weaviate
     restart: on-failure:0
@@ -15,15 +15,22 @@ services:
       DEFAULT_VECTORIZER_MODULE: 'none'
       CLUSTER_HOSTNAME: 'node1'
   ingest:
-    image: myexpertchat:latest
+    build:
+      context: . 
     ports:
-    - 8000:8005
+    - 8000:8000
+    - 8501:8501
     volumes:
-    - llm_data:/data/
+    - llm_data:/data/:777
     environment:
       HF_HOME: '/data/huggingface'
+      ROOT_PATH_FOR_DYNACONF: '/app/myexpertchat'
       MYEXPERTCHAT_WEAVIATE_URL: 'http://weaviate:8080'
-    command: gunicorn /app/ingest:app
+
+    # command: gunicorn -b 0.0.0.0:8000 myexpertchat.ingest:app
+    command: streamlit run frontend.py
+    depends_on:
+      - weaviate
 
 
 

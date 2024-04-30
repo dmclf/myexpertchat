@@ -22,16 +22,19 @@ def build_llm():
         f16_kv=True,  # MUST set to True, otherwise you will run into problem after a couple of calls
         verbose=True,
         n_ctx=1200,  # must be big enough to allow text snippets for context
+        # n_batch=400,
+        # n_gpu_layers=-1, 
+        n_threads=settings.llm_n_threads,
     )
     return llm
 
+llm = build_llm()
 
 def build_prompt():
     prompt_template = """
     <|system|>
-    Using the information contained in the context, 
-    give a comprehensive answer to the question.
-    If the answer is contained in the context, also report the source URL.
+    Using the information contained in the context, give a comprehensive answer to the question.
+    Take note of the sources and include them in the answer in the format: "SOURCES: source1 source2", use "SOURCES" in capital letters regardless of the number of sources.
     If the answer cannot be deduced from the context, do not give an answer.
 
     </s>
@@ -64,7 +67,7 @@ def build_rag_chain():
     chain = (
         {"context": retriever, "question": RunnablePassthrough()}
         | prompt
-        # | llm
+        | llm
         | StrOutputParser()
     )
     return chain
@@ -76,4 +79,5 @@ def get_answer_from_rag(question: str) -> str:
         CHAIN = build_rag_chain()
     log.info(f"running query: {question}")
     response = CHAIN.invoke(question)
+    # import pdb; pdb.set_trace()
     return response
