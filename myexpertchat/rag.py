@@ -48,13 +48,16 @@ def build_prompt():
 
     Returns:
         TODO: Add type, that can be used directly as step in chain.
+
+    TODO: Include the prompt part below once we retrieve metadata.
+    Take note of the sources and include them in the answer in the format: "SOURCES: source1 source2", use "SOURCES" in 
+    capital letters regardless of the number of sources.
     """
 
     prompt_template = """
     <|system|>
-    Using the information contained in the context, give a comprehensive answer to the question.
-    Take note of the sources and include them in the answer in the format: "SOURCES: source1 source2", use "SOURCES" in 
-    capital letters regardless of the number of sources.
+    You are a service agent who aggregates knowledge coming from a large number of text sources. 
+    Using the information contained in the context, give a concise answer to the question.
     If the answer cannot be deduced from the context, do not give an answer.
 
     </s>
