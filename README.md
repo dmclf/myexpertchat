@@ -1,12 +1,12 @@
 # myexpertchat
 ### LLM powered discovery of expert knowledge
 
-![An example of a chat session with myexpertchat](assets/screenshot.png)
+<img src="assets/screenshot.png" width="500">
 
 This is a basic version of a knowledge management system using a locally run LLM
 as part of a RAG (=Retrieval Augmented Generation) chain. Funtionality includes:
 
-* End point for ingesting text data with source information.  i
+* End point for ingesting text data with source information.
 * Frontend app offering a chat interface in the browser.  
 * Backend process that retrieves relevant text data and uses an LLM to summarize the content.
 
