@@ -1,6 +1,8 @@
 # myexpertchat
 ### LLM powered discovery of expert knowledge
 
+![An example of a chat session with myexpertchat](assets/screenshot.png)
+
 This is a basic version of a knowledge management system using a locally run LLM
 as part of a RAG (=Retrieval Augmented Generation) chain. Funtionality includes:
 
