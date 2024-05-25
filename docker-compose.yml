@@ -27,10 +27,10 @@ services:
       ROOT_PATH_FOR_DYNACONF: '/app/myexpertchat'
       MYEXPERTCHAT_WEAVIATE_URL: 'http://weaviate:8080'
 
-    # command: gunicorn -b 0.0.0.0:8000 myexpertchat.ingest:app
-    command: streamlit run frontend.py
-    depends_on:
-      - weaviate
+    command: gunicorn -b 0.0.0.0:8000 myexpertchat.ingest:app
+    # command: streamlit run frontend.py
+    # depends_on:
+    #   - weaviate
 
 
 

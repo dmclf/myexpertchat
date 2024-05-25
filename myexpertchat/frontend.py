@@ -1,3 +1,9 @@
+"""
+Streamlit frontend that displays a text box to enter questions on the bottom of the page. #
+The questions and answers are then displayed as a chat history on the page.
+"""
+
+
 import streamlit as st
 
 from myexpertchat.rag import llm
@@ -23,9 +29,7 @@ if prompt := st.chat_input("Message MyExpertChat..."):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    response = f"MyExpertChat: {prompt}"
-    # response = llm.invoke(prompt)
-    # response = f"MyExpertChat: {get_answer_from_rag(question=prompt)}"
+    response = f"MyExpertChat: {get_answer_from_rag(question=prompt)}"
 
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
