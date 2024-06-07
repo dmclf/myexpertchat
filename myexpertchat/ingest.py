@@ -15,23 +15,18 @@ payload like:
 The dict provided for metadata can have any key/value pairs, which then get stored in the vector DB.
 """
 
-import logging
-from typing import Any
-
 from flask import Flask, request
 from langchain_text_splitters import SentenceTransformersTokenTextSplitter
 
 from myexpertchat.config import settings
 from myexpertchat.db import get_db_connection
 
-log = logging.getLogger(__name__)
-
 
 def insert_text(text: str, metadata: dict[str, str]):
     """Process text by cutting it into snippets and attach metadata to each snippet.
 
     Args:
-        text: Any long text that should be inserted into the database. 
+        text: Any long text that should be inserted into the database.
         metadata: A dict of strings like {"URL": "https://..."}.
     """
     text_splitter = SentenceTransformersTokenTextSplitter(model_name=settings.embedding_model)

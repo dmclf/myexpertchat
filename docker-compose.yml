@@ -1,8 +1,8 @@
 services:
   weaviate:
     image: semitechnologies/weaviate:1.24.5
-    # ports:
-    expose:
+    ports:
+    # expose:
     - 8080:8080
     - 50051:50051
     volumes:
@@ -19,7 +19,7 @@ services:
       context: . 
     ports:
     - 8000:8000
-    - 8501:8501
+    # - 8501:8501
     volumes:
     - llm_data:/data/:777
     environment:

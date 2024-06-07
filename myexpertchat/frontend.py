@@ -3,7 +3,6 @@ Streamlit frontend that displays a text box to enter questions on the bottom of 
 The questions and answers are then displayed as a chat history on the page.
 """
 
-
 import streamlit as st
 
 from myexpertchat.rag import get_answer_from_rag

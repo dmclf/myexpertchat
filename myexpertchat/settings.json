@@ -3,5 +3,6 @@
     "weaviate_url": "http://localhost:8080",
     "embedding_model": "all-MiniLM-L6-v2",
     "llm_model_file":"/data/llm/zephyr-7b-beta.Q4_K_M.gguf",
+    "llm_model_url":"https://huggingface.co/TheBloke/zephyr-7B-beta-GGUF/resolve/main/zephyr-7b-beta.Q4_K_M.gguf",
     "llm_n_threads": 4
 }

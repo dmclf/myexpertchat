@@ -27,7 +27,7 @@ COPY myexpertchat myexpertchat
 COPY pyproject.toml poetry.lock ./
 
 RUN poetry config virtualenvs.create false \
-    && poetry install --without dev
+    && poetry install --no-cache --without dev
 
 EXPOSE 8000 8510
 

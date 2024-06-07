@@ -1,4 +1,3 @@
-from typing import Any
 import weaviate
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Weaviate
@@ -14,5 +13,11 @@ def get_db_connection():
     """
     client = weaviate.Client(settings.weaviate_url)
     embeddings = HuggingFaceEmbeddings(model_name=settings.embedding_model)
-    db = Weaviate(client=client, index_name=settings.weaviate_collection, text_key="text", embedding=embeddings, by_text=False)
+    db = Weaviate(
+        client=client,
+        index_name=settings.weaviate_collection,
+        text_key="text",
+        embedding=embeddings,
+        by_text=False,
+    )
     return db

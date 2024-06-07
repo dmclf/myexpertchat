@@ -1,10 +1,11 @@
-import logging
 import os
+import urllib.request
 
 from langchain.prompts import PromptTemplate
 from langchain_community.llms import LlamaCpp
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
+from loguru import logger
 
 from myexpertchat.config import settings
 from myexpertchat.db import get_db_connection
@@ -12,13 +13,11 @@ from myexpertchat.db import get_db_connection
 # Lazy load chain, initialize to None.
 CHAIN = None
 
-log = logging.getLogger(__name__)
-
 
 def build_llm():
     """Wrpper function that creates a LLM step that can be used in chain.
-    
-    Lazy load model file if URL is given in settings and file is missing. Otherwise fail. 
+
+    Lazy load model file if URL is given in settings and file is missing. Otherwise fail.
 
     Returns:
         TODO: Add type. Fully initialised LLM model.
@@ -28,10 +27,12 @@ def build_llm():
     if not os.path.isfile(model_file):
         model_url = settings.llm_model_url
         if settings.llm_model_url is None:
-            raise ValueError(f"LLM model file missing in {model_file} and no URL to download from given in {model_url}")
+            raise ValueError(
+                f"LLM model file missing in {model_file} and no URL to download from given in {model_url}"
+            )
         else:
-            log.info("Downloading LLM model from {model_url} to {model_file}")
-            raise NotImplementedError()
+            logger.info(f"Downloading LLM model from {model_url} to {model_file}")
+            urllib.request.urlretrieve(model_url, model_file)
 
     llm = LlamaCpp(
         model_path=model_file,
@@ -50,20 +51,20 @@ def build_prompt():
         TODO: Add type, that can be used directly as step in chain.
 
     TODO: Include the prompt part below once we retrieve metadata.
-    Take note of the sources and include them in the answer in the format: "SOURCES: source1 source2", use "SOURCES" in 
+    Take note of the sources and include them in the answer in the format: "SOURCES: source1 source2", use "SOURCES" in
     capital letters regardless of the number of sources.
     """
 
     prompt_template = """
     <|system|>
-    You are a service agent who aggregates knowledge coming from a large number of text sources. 
+    You are a service agent who aggregates knowledge coming from a large number of text sources.
     Using the information contained in the context, give a concise answer to the question.
     If the answer cannot be deduced from the context, do not give an answer.
 
     </s>
 
     <|user|>
-    Context: 
+    Context:
     {context}
 
     Question:
@@ -92,7 +93,12 @@ def build_rag_chain() -> str:
     db = get_db_connection()
     retriever = db.as_retriever(search_type="similarity", search_kwargs={"k": 3})
 
-    chain = {"context": retriever, "question": RunnablePassthrough()} | prompt | llm | StrOutputParser()
+    chain = (
+        {"context": retriever, "question": RunnablePassthrough()}
+        | prompt
+        | llm
+        | StrOutputParser()
+    )
     return chain
 
 
@@ -110,6 +116,6 @@ def get_answer_from_rag(question: str) -> str:
     global CHAIN
     if CHAIN is None:
         CHAIN = build_rag_chain()
-    log.info(f"running query: {question}")
+    logger.info(f"running query: {question}")
     response = CHAIN.invoke(question)
     return response
