@@ -12,7 +12,8 @@ as part of a RAG (=Retrieval Augmented Generation) chain. Funtionality includes:
 
 ### Installation / Deployment
 
-** Deployment with docker compose is currently under development. Please use dev install in the meantime. **
+** Deployment with docker compose is under development. feel free to use dev install in case of issues or other preferences. **
+
 
 ##### Docker deployment
 
@@ -24,6 +25,27 @@ inside those volumes as well, so sufficient storage space should be provided.
 The app will expose the following services:
 * The webservice to access the chat frontend at port :8000
 * An endpoint to ingest and process new data at port `:8001/inserttext/`
+
+** note: docker compose can take a while to start up initially, example.. 23 minutes
+** and initial loading of LLM also can take a minute or 6 (roughly)
+
+##### Docker compose quickstart example
+
+```
+docker compose up -d
+# wait for services to be available. (can take ... up to ~ 30 minutes?) 
+
+# feed sample text
+curl -XPOST 127.0.0.1:8001/inserttext -H "Content-Type: application/json" -d'{"text": "Antarctica is in the south", "metadata": {"url": "google.com"}}'
+# should return "Success"
+```
+
+Navigate go to UI on http://x.x.x.x:8000
+
+sample question: 'where is Antartica"
+
+expected: `MyExpertChat: Answer: Antarctica is in the south, according to the provided context.`
+
 
 ##### Development installation
 
@@ -49,5 +71,12 @@ streamlit run myexpertchat/frontend.py
 ```
 This exposes a port at `localhost:8501` that can be opened in the browser.
 
+
+Sample insert
+```
+curl -XPOST 127.0.0.1:8001/inserttext -H "Content-Type: application/json" -d'{"text": "Antarctica is in the south", "metadata": {"url": "google.com"}}'
+```
+
 ## License
 `myexpertchat` is licensed under the Apache license v2.0, a copy of which is included in [LICENSE](LICENSE)
+

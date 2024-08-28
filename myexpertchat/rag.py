@@ -25,6 +25,8 @@ def build_llm():
     model_file = settings.llm_model_file
 
     if not os.path.isfile(model_file):
+        if not os.path.isdir(os.path.dirname(model_file)):
+            os.mkdir(os.path.dirname(model_file))
         model_url = settings.llm_model_url
         if settings.llm_model_url is None:
             raise ValueError(

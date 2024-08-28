@@ -4,7 +4,6 @@ services:
     ports:
     # expose:
     - 8080:8080
-    - 50051:50051
     volumes:
     - weaviate_data:/var/lib/weaviate
     restart: on-failure:0
@@ -14,26 +13,23 @@ services:
       PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
       DEFAULT_VECTORIZER_MODULE: 'none'
       CLUSTER_HOSTNAME: 'node1'
+      LIMIT_RESOURCES: 'true'
   ingest:
     build:
       context: . 
     ports:
     - 8000:8000
-    # - 8501:8501
+    - 8001:8001
     volumes:
     - llm_data:/data/:777
     environment:
       HF_HOME: '/data/huggingface'
       ROOT_PATH_FOR_DYNACONF: '/app/myexpertchat'
-      MYEXPERTCHAT_WEAVIATE_URL: 'http://weaviate:8080'
-
-    command: gunicorn -b 0.0.0.0:8000 myexpertchat.ingest:app
-    # command: streamlit run frontend.py
-    # depends_on:
-    #   - weaviate
-
-
-
+      MYEXPERTCHAT_WEAVIATE_URL: "http://weaviate:8080"
+      PYTHONPATH: '/app'
+    command: /bin/multirun "flask --app myexpertchat/ingest.py run --port 8001 --host 0.0.0.0" "streamlit run myexpertchat/frontend.py --server.port 8000"
+    depends_on:
+      - weaviate
     # volumes:
     # -model_cache:/home/user/.cache/huggingface
 volumes:

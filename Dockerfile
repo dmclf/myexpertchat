@@ -28,6 +28,9 @@ COPY pyproject.toml poetry.lock ./
 
 RUN poetry config virtualenvs.create false \
     && poetry install --no-cache --without dev
+# https://github.com/nicolas-van/multirun
+RUN curl -sSL https://github.com/nicolas-van/multirun/releases/download/1.1.3/multirun-x86_64-linux-gnu-1.1.3.tar.gz | tar -xz && \
+    mv multirun /bin
 
 EXPOSE 8000 8510
 
