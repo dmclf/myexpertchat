@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 ARG USERNAME=user
 # Hardcoding user 1000:1000 as this is the default WSL UID.
@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y build-essential cmake curl \
     
 
 COPY myexpertchat myexpertchat 
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml ./
 
 RUN poetry config virtualenvs.create false \
     && poetry install --no-cache --without dev

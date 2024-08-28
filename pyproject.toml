@@ -6,8 +6,8 @@ authors = ["Dominik Christ <dominik.christ@gmx.net>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-weaviate-client = "3.99.0a5"
+python = "^3.12.5"
+weaviate-client = "^4.7.1"
 sentence-transformers = "^2.6.1"
 langchain = "^0.1.13"
 streamlit = "^1.32.2"

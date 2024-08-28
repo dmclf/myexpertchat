@@ -1,6 +1,6 @@
 services:
   weaviate:
-    image: semitechnologies/weaviate:1.24.5
+    image: semitechnologies/weaviate:1.26.2
     ports:
     # expose:
     - 8080:8080
@@ -30,8 +30,15 @@ services:
     command: /bin/multirun "flask --app myexpertchat/ingest.py run --port 8001 --host 0.0.0.0" "streamlit run myexpertchat/frontend.py --server.port 8000"
     depends_on:
       - weaviate
-    # volumes:
-    # -model_cache:/home/user/.cache/huggingface
 volumes:
   weaviate_data:
   llm_data:
+    #deploy:
+    #  resources:
+    #    reservations:
+    #      devices:
+    #        - driver: nvidia
+    #          count: all
+    #          capabilities: [gpu]
+    # volumes:
+    # -model_cache:/home/user/.cache/huggingface
